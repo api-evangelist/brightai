@@ -1,0 +1,109 @@
+generated: '2026-08-08'
+method: derived
+source: mcp/brightai-mcp.yml + llms/brightai-llms.txt + live probes of https://public.stateful.world/api/public/*
+note: 'BrightAI publishes NO OpenAPI, so the REST column here carries observed public
+  paths rather than operationIds. Every path listed is one BrightAI itself documents
+  in its llms.txt "Live data" section and that returned 200 on probe. No operation
+  has been invented, and no OpenAPI has been authored on BrightAI''s behalf.'
+surfaces:
+  openapi:
+    present: false
+    note: No OpenAPI/Swagger found on any host. Probed api.bright.ai (AWS ALB, 403
+      "Invalid Host" / 404), www.bright.ai, and public.stateful.world for /openapi.json,
+      /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs, /redoc — all
+      miss.
+  graphql:
+    present: false
+    note: No /graphql surface responded on any host.
+  mcp:
+    url: https://public.stateful.world/mcp
+    gated: false
+    tools_list_http_status: 200
+    tools: 6
+  rest:
+    base: https://public.stateful.world/api/public
+    gated: false
+    documented_in: https://public.stateful.world/llms.txt
+    paths_observed: 2
+crosswalk:
+- tool: list_industries
+  category: observability-data
+  rest:
+  - GET /api/public/industries
+  binding: rest
+  confidence: high
+  note: 'Probed 200 application/json. The REST response is the superset: it carries
+    a worldwide{} rollup (total_aai_usd_per_year, operators_profiled, problem_families,
+    priced_problem_instances, verticals) plus the same per-industry rows (slug, name,
+    aai_usd_per_year, operators_profiled, problem_families, page) the tool returns.'
+- tool: check_company
+  category: operator-lookup
+  rest:
+  - GET /api/public/company-teaser?name={name}
+  binding: rest
+  confidence: high
+  note: 'BrightAI''s own start.md names this endpoint as the explicit fallback for
+    clients that cannot call MCP tools: "Only if you cannot call MCP tools, fetch
+    .../api/public/company-teaser?name=...". The MCP tool additionally accepts a
+    `domain` parameter; the documented REST form only shows `name`.'
+- tool: brightai_overview
+  category: company-facts
+  rest: []
+  binding: none
+  confidence: high
+  note: No REST equivalent. The same facts are published as static markdown at
+    https://public.stateful.world/start.md, /press.md and /investors.md — documents,
+    not an API.
+mcp_only:
+- tool: get_industry
+  reason: Per-vertical deep dive (top problem families with definitions and applicability).
+    The REST /api/public/industries endpoint returns aggregate rows only; no public
+    REST path exposes a single vertical's problem families.
+- tool: list_problem_families
+  reason: The observability problem-family taxonomy (160 families) has no public REST
+    endpoint. Filterable by industry/search and limit only through MCP.
+- tool: get_problem_family
+  reason: Full public definition of one problem family (definition, anatomy, typical
+    assets, verticals). MCP-only.
+- tool: brightai_overview
+  reason: Composite company/press/investor brief assembled server-side; published as
+    markdown documents but not as a JSON endpoint.
+rest_only: []
+prompts_and_resources:
+  note: The MCP server also exposes 5 prompts and 4 markdown corpus resources that
+    have no REST or OpenAPI counterpart at all — the widest surface divergence here.
+  prompts:
+  - discover-brightai
+  - assess-my-company
+  - press-briefing
+  - considering-joining
+  - investor-briefing
+  resources:
+  - brightai-public://corpus/01-brightai-thesis-overview
+  - brightai-public://corpus/02-stateful-platform-architecture
+  - brightai-public://corpus/03-observability-problem-definition
+  - brightai-public://corpus/04-vertical-value-chain-map
+coverage:
+  tools_named: 6
+  tools_bound_to_rest: 2
+  mcp_only: 4
+  rest_paths_total: 2
+  rest_paths_with_a_tool: 2
+  rest_only: 0
+  openapi_operations_total: 0
+x-evidence:
+  fetched: '2026-08-08'
+  probes:
+  - url: https://public.stateful.world/mcp
+    method: POST tools/list
+    http_status: 200
+  - url: https://public.stateful.world/api/public/industries
+    http_status: 200
+    content_type: application/json
+  - url: https://public.stateful.world/api/public/company-teaser?name=Acme+Corp
+    http_status: 200
+    content_type: application/json
+  - url: https://public.stateful.world/openapi.json
+    http_status: 404
+  - url: https://api.bright.ai/openapi.json
+    http_status: 404

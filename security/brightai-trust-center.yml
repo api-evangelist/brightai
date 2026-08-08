@@ -1,0 +1,13 @@
+generated: '2026-08-08'
+method: searched
+probe: true
+source: https://trust.bright.ai/
+url: https://trust.bright.ai/
+certifications:
+- SOC 2
+evidence:
+- source: https://trust.bright.ai/
+  keywords:
+  - soc 2
+  - soc2
+  - trust center

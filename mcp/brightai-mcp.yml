@@ -1,0 +1,196 @@
+generated: '2026-08-08'
+method: searched
+source: https://public.stateful.world/mcp
+status: published
+discovery:
+  advertised_in:
+  - https://public.stateful.world/llms.txt
+  - https://public.stateful.world/start.md
+  - https://www.bright.ai/ (homepage "ask an assistant" links point at start.md, which
+    documents the server)
+  note: BrightAI publishes no developer portal and no OpenAPI. The MCP server is the
+    company's only machine-readable, self-describing API surface, and it is fully
+    anonymous — tools/list, prompts/list and resources/list all answer without credentials.
+server:
+  name: brightai-public
+  version: 0.1.0
+  transport: http
+  protocol: streamable-http
+  url: https://public.stateful.world/mcp
+  protocol_version: '2025-06-18'
+  authentication: none
+  connect_hint: 'claude.ai: Settings > Connectors > Add custom connector'
+  instructions_published: true
+capabilities:
+  tools:
+    listChanged: true
+  prompts:
+    listChanged: true
+  resources:
+    listChanged: true
+tools:
+- name: brightai_overview
+  title: BrightAI overview
+  description: Who BrightAI is, what the Stateful platform does, canonical platform-scale
+    figures, and the live worldwide opportunity numbers from BrightAI's Global Observability
+    Database (BGOD). Includes press-facts and investor-thesis sections. Start here.
+  parameters: []
+  required: []
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: list_industries
+  title: Industry list
+  description: Every essential-services vertical BrightAI has mapped, each with live
+    anonymized aggregates - addressable annual impact (USD/yr), operators profiled,
+    and observability problem-family count.
+  parameters: []
+  required: []
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: get_industry
+  title: Industry deep-dive
+  description: One vertical in depth - live aggregates plus its top observability problem
+    families (names, first-sentence definitions, applicability). Accepts the slug from
+    list_industries or a close industry name.
+  parameters:
+  - name: industry
+    type: string
+    minLength: 2
+    required: true
+    description: Slug or name of the vertical, e.g. "water-and-wastewater" or "Oil
+      & Gas".
+  required:
+  - industry
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: list_problem_families
+  title: Observability problem catalog
+  description: The canonical catalog of observability problem families BrightAI has
+    mapped worldwide (the public taxonomy). Optionally filter by industry slug or a
+    name substring.
+  parameters:
+  - name: industry
+    type: string
+    required: false
+    description: Optional vertical slug/name filter.
+  - name: search
+    type: string
+    required: false
+    description: Optional substring filter on family name.
+  - name: limit
+    type: integer
+    required: false
+    minimum: 1
+    maximum: 200
+    default_note: default 40
+    description: Max rows.
+  required: []
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: get_problem_family
+  title: Problem deep-dive
+  description: The complete public definition of one observability problem family -
+    formal definition, anatomy (manifestations / measurement / intervention), typical
+    assets, and which verticals it applies to.
+  parameters:
+  - name: family_id
+    type: string
+    minLength: 1
+    required: true
+    description: Family id from list_problem_families.
+  required:
+  - family_id
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: check_company
+  title: Company lookup
+  description: Name (or website domain) lookup against BrightAI's Global Observability
+    Database. Returns neutral public facts only - whether the company is profiled,
+    its industry, HQ, a one-line description, and the names and count of observability
+    problem families identified for it. Minor spelling variations are matched automatically;
+    a matched_via "close_spelling" flag marks a did-you-mean correction. Deeper detail
+    is available only to verified employees of the company itself.
+  parameters:
+  - name: name
+    type: string
+    required: false
+    description: Company name, e.g. "Osmose Utilities Services". Close spellings are
+      okay.
+  - name: domain
+    type: string
+    required: false
+    description: Company website domain, e.g. "osmose.com".
+  required: []
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+prompts:
+- name: discover-brightai
+  title: Discover BrightAI
+  description: 'Guided discovery: what BrightAI does and where it applies to your business.'
+- name: assess-my-company
+  title: Assess my company
+  description: Check whether your company is in BrightAI's Global Observability Database
+    and what that means.
+- name: press-briefing
+  title: Press briefing
+  description: 'For journalists: the BrightAI story in three stats, examples, boilerplate,
+    quotables.'
+- name: considering-joining
+  title: Considering joining BrightAI
+  description: 'For job candidates: the mission, the engineering, the scale, and open
+    roles.'
+- name: investor-briefing
+  title: Investor briefing
+  description: 'For investors: the Physical AI category thesis, the market map, and
+    the moat.'
+resources:
+- uri: brightai-public://corpus/01-brightai-thesis-overview
+  title: BrightAI Thesis Overview
+  mimeType: text/markdown
+- uri: brightai-public://corpus/02-stateful-platform-architecture
+  title: Stateful AI Platform — Architecture (Public)
+  mimeType: text/markdown
+- uri: brightai-public://corpus/03-observability-problem-definition
+  title: The Observability Problem
+  mimeType: text/markdown
+- uri: brightai-public://corpus/04-vertical-value-chain-map
+  title: BrightAI Observability — Complete Vertical & Value Chain Map
+  mimeType: text/markdown
+verbatim:
+  file: brightai-mcp-tools.json
+  note: Unmodified JSON-RPC result of tools/list, including every tool's draft-07 inputSchema.
+x-evidence:
+  fetched: '2026-08-08'
+  initialize:
+    url: https://public.stateful.world/mcp
+    method: 'POST initialize'
+    http_status: 200
+    content_type: text/event-stream
+  tools_list:
+    url: https://public.stateful.world/mcp
+    method: 'POST tools/list'
+    http_status: 200
+    tools_returned: 6
+    gated: false
+  oauth_probe:
+    url: https://public.stateful.world/.well-known/oauth-protected-resource
+    http_status: 404
+    body_note: 'server answers: "This MCP server is public and requires no authentication"'

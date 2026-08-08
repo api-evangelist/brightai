@@ -1,0 +1,174 @@
+{
+  "result": {
+    "tools": [
+      {
+        "name": "brightai_overview",
+        "title": "BrightAI overview",
+        "description": "Who BrightAI is, what the Stateful platform does, canonical platform-scale figures, and the live worldwide opportunity numbers from BrightAI's Global Observability Database (BGOD). Includes press-facts and investor-thesis sections. Start here.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "title": "BrightAI overview"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      },
+      {
+        "name": "list_industries",
+        "title": "Industry list",
+        "description": "Every essential-services vertical BrightAI has mapped, each with live anonymized aggregates: addressable annual impact (USD/yr), operators profiled, and observability problem-family count. The count is whatever the live catalog holds \u2014 read it from the response rather than assuming a fixed number. Use get_industry for depth on one vertical.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "title": "Industry list"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      },
+      {
+        "name": "get_industry",
+        "title": "Industry deep-dive",
+        "description": "One vertical in depth: live aggregates plus its top observability problem families (names, first-sentence definitions, applicability). Accepts the slug from list_industries (e.g. \"oil-and-gas\") or a close industry name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "industry": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Slug or name of the vertical, e.g. \"water-and-wastewater\" or \"Oil & Gas\"."
+            }
+          },
+          "required": [
+            "industry"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "title": "Industry deep-dive"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      },
+      {
+        "name": "list_problem_families",
+        "title": "Observability problem catalog",
+        "description": "The canonical catalog of observability problem families BrightAI has mapped worldwide (the public taxonomy). Optionally filter by industry slug or a name substring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "industry": {
+              "type": "string",
+              "description": "Optional vertical slug/name filter."
+            },
+            "search": {
+              "type": "string",
+              "description": "Optional substring filter on family name."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Max rows, default 40 (compact). Ask for more or filter by industry/search when needed."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "title": "Observability problem catalog"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      },
+      {
+        "name": "get_problem_family",
+        "title": "Problem deep-dive",
+        "description": "The complete public definition of one observability problem family: formal definition, anatomy (manifestations / measurement / intervention), typical assets, and which verticals it applies to.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "family_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Family id from list_problem_families."
+            }
+          },
+          "required": [
+            "family_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "title": "Problem deep-dive"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      },
+      {
+        "name": "check_company",
+        "title": "Company lookup",
+        "description": "Name (or website domain) lookup against BrightAI's Global Observability Database. Returns neutral public facts only: whether the company is profiled, its industry, HQ, a one-line description, and the NAMES and COUNT of observability problem families identified for it. Minor spelling variations are matched automatically \u2014 a matched_via: \"close_spelling\" flag marks a did-you-mean correction; confirm the corrected name with the user. Deeper detail (including any modeled figures) is available only to verified employees of the company itself - rolling out shortly. Not a search tool: pass the company's actual name or domain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Company name, e.g. \"Osmose Utilities Services\". Close spellings are okay."
+            },
+            "domain": {
+              "type": "string",
+              "description": "Company website domain, e.g. \"osmose.com\"."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "title": "Company lookup"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 1
+}

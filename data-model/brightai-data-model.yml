@@ -1,0 +1,151 @@
+generated: '2026-08-08'
+method: derived
+source: observed MCP structuredContent + /api/public/industries responses (no OpenAPI
+  exists to derive from)
+note: 'BrightAI publishes no OpenAPI and no schema documents, so this graph is derived
+  from the field names and reference keys that appear in real, unauthenticated responses
+  observed on 2026-08-08. Only fields actually seen in a response are listed; nothing
+  is inferred from naming.'
+domain: BGOD — BrightAI's Global Observability Database
+entities:
+- name: Worldwide
+  description: The single top-level rollup of the whole database.
+  source: GET /api/public/industries -> worldwide{}
+  fields:
+  - total_aai_usd_per_year
+  - operators_profiled
+  - problem_families
+  - priced_problem_instances
+  - verticals
+  - grade_distribution_note
+- name: Industry
+  aka: vertical
+  id_field: slug
+  id_style: kebab-case slug (e.g. water-and-wastewater, oil-and-gas)
+  description: An essential-services vertical BrightAI has mapped.
+  sources:
+  - GET /api/public/industries -> industries[]
+  - MCP list_industries
+  - MCP get_industry
+  fields:
+  - slug
+  - name
+  - description
+  - aai_usd_per_year
+  - average_addressable_impact_per_operator_usd
+  - impact_framing
+  - operators_profiled
+  - problem_families
+  - top_problem_families[]
+  - page
+- name: ProblemFamily
+  id_field: id
+  id_style: 'inconsistent — both kebab-case and snake_case ids are live in the same
+    catalog (e.g. "storage-tank-floor-shell-and-roof" alongside "locate_811_ticket_intelligence",
+    "factory_production_quality_and_first_pass_yield"). Clients must treat the id as
+    an opaque string returned by list_problem_families, never construct one.'
+  description: A named, recurring category of "the operator cannot sufficiently know
+    the real-time state of a physical asset or the outcome of a field action."
+  sources:
+  - MCP list_problem_families
+  - MCP get_problem_family
+  - Industry.top_problem_families[]
+  fields:
+  - id
+  - name
+  - definition_first_sentence
+  - industries_linked
+  - priced_instances
+  - priced_instances_in_vertical
+  full_definition_fields:
+  - formal definition
+  - anatomy (manifestations / measurement / intervention)
+  - typical assets
+  - applicable verticals
+  note_on_full_definition: Enumerated from the get_problem_family tool description;
+    field names for the deep-dive payload were not individually captured.
+- name: Operator
+  aka: company / profiled infrastructure operator
+  id_field: none public
+  lookup_by:
+  - name (fuzzy)
+  - domain
+  description: An operator of essential infrastructure profiled in BGOD from public
+    sources only.
+  sources:
+  - MCP check_company
+  - GET /api/public/company-teaser
+  fields:
+  - in_bgod
+  - matched_via
+  - note
+  - industry
+  - hq
+  - description
+  - problem family names + count
+  access_note: 'Public callers get neutral facts only. Modeled dollar figures and the
+    operator''s grade are restricted to verified employees of that company — BrightAI
+    states this is rolling out shortly.'
+relationships:
+- from: Worldwide
+  to: Industry
+  kind: has_many
+  via: industries[]
+  cardinality: 15 verticals observed
+- from: Industry
+  to: ProblemFamily
+  kind: has_many
+  via: top_problem_families[]
+  note: A partial, ranked projection — the industry row reports a total problem_families
+    count larger than the returned array.
+- from: ProblemFamily
+  to: Industry
+  kind: has_many
+  via: industries_linked (count only; the linked slugs are not returned in the compact
+    list form)
+  note: The relationship is many-to-many — one family is linked to up to 58 industry
+    rows in observed data.
+- from: Industry
+  to: Operator
+  kind: has_many
+  via: operators_profiled (count only; individual operators are never enumerated)
+- from: Operator
+  to: Industry
+  kind: belongs_to
+  via: industry
+- from: Operator
+  to: ProblemFamily
+  kind: has_many
+  via: problem family names returned by check_company
+- from: ProblemFamily
+  to: PricedInstance
+  kind: has_many
+  via: priced_instances
+measures:
+- name: aai_usd_per_year
+  label: Addressable Annual Impact
+  unit: USD/year
+  note: Live estimate, recomputed continuously; methodology published at https://public.stateful.world/methodology.
+- name: priced_instances
+  label: individually priced problem instances
+  note: 279,501 worldwide at observation time.
+- name: grade
+  label: real-time asset awareness grade
+  scale: letter grade A–F
+  access: Aggregate only in public (98% grade D or worse, 93% grade F). Per-operator
+    grades are not public.
+enumerable_via:
+  industries: MCP list_industries or GET /api/public/industries
+  problem_families: MCP list_problem_families (limit 1–200, default 40)
+  operators: not enumerable — lookup only, one at a time, by name or domain
+x-evidence:
+  fetched: '2026-08-08'
+  probes:
+  - url: https://public.stateful.world/api/public/industries
+    http_status: 200
+  - url: https://public.stateful.world/mcp
+    method: 'tools/call get_industry {industry: water-and-wastewater}'
+    http_status: 200
+  - url: https://public.stateful.world/mcp
+    method: 'tools/call list_problem_families {limit: 2}'
+    http_status: 200

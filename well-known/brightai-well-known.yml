@@ -1,0 +1,89 @@
+generated: '2026-08-08'
+method: probed
+source: live GET probes, 2026-08-08
+result: none
+note: 'Recorded as evidence of a completed probe, not as a discovery. BrightAI serves
+  NO /.well-known/ document on any host. This artifact carries no apis.yml pointer,
+  because there is nothing present to point at — a WellKnown or SecurityTxt pointer
+  here would credit a surface that does not exist.'
+hosts:
+- host: https://www.bright.ai
+  behaviour: 'Answers every /.well-known/* path with HTTP 404 and an HTML body reading
+    "Invalid .well-known request" — a deliberate catch-all, so no individual path can
+    be distinguished.'
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://public.stateful.world
+  behaviour: Answers unmatched paths with HTTP 404 and a JSON body {"error":"not_found","hint":"This
+    is BrightAI's public agent surface."}; the two OAuth paths get a bespoke note confirming
+    the MCP server needs no authentication.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    body_note: This MCP server is public and requires no authentication
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    body_note: This MCP server is public and requires no authentication
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://api.bright.ai
+  behaviour: AWS ALB. Returns 403 text/plain "Invalid Host" for /.well-known/* and
+    403/404 elsewhere. No document served.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+- host: https://www.stateful.world
+  behaviour: 'SPA catch-all — returns HTTP 200 text/html for EVERY path including
+    /.well-known/agent-card.json, /.well-known/agent.json and /llms.txt. Rejected: a
+    200 whose body is the HTML app shell is not a well-known document, and treating
+    it as one is the dominant false positive on this probe.'
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: text/html
+    accepted: false
+    reason: HTML SPA shell, not an AgentCard JSON object
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: text/html
+    accepted: false
+    reason: HTML SPA shell
+adjacent_discovery_found_elsewhere:
+  note: BrightAI does publish agent discovery — just not under /.well-known/.
+  documents:
+  - url: https://public.stateful.world/llms.txt
+    status: 200
+    saved_as: llms/brightai-llms.txt
+  - url: https://public.stateful.world/start.md
+    status: 200
+  - url: https://www.bright.ai/robots.txt
+    status: 200
+    note: served but zero bytes
+  - url: https://public.stateful.world/robots.txt
+    status: 200
+    body: 'User-agent: * / Allow: /'

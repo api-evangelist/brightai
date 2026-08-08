@@ -1,0 +1,87 @@
+generated: '2026-08-08'
+method: probed
+source: live probes of https://public.stateful.world/mcp and https://public.stateful.world/api/public/*
+format: bespoke-json
+rfc9457: false
+note: 'Not derived from an OpenAPI — BrightAI publishes none, and publishes no error
+  reference page. Every entry below was observed by calling the live public surface
+  and recording exactly what came back. Nothing here is inferred.'
+envelope:
+  rest:
+    shape: '{"error": "<machine_slug>", "hint": "<human remediation>"}'
+    variant: '"note" replaces "hint" on the MCP oauth discovery paths'
+    content_type: application/json; charset=utf-8
+    fields:
+      error: stable machine-readable slug
+      hint: human-readable remediation sentence, usually naming the exact next call
+      note: alternate human-readable field, used on the MCP well-known paths
+  mcp:
+    transport_errors: JSON-RPC 2.0 error object with numeric `code`
+    tool_errors: 'returned as a successful JSON-RPC result carrying isError: true and
+      the message in content[].text — the MCP convention, so a tool failure is not
+      an HTTP or JSON-RPC failure'
+    structured_output: 'domain errors additionally populate structuredContent with the
+      same {error, hint} shape as REST'
+problems:
+- status: 404
+  error: not_found
+  title: Unknown path on the public agent surface
+  hint: This is BrightAI's public agent surface.
+  observed_at: https://public.stateful.world/openapi.json
+  remediation: Fetch https://public.stateful.world/llms.txt for the published surface
+    index.
+- status: 404
+  error: not_found
+  title: OAuth discovery not applicable
+  note: This MCP server is public and requires no authentication.
+  observed_at: https://public.stateful.world/.well-known/oauth-protected-resource
+  remediation: Connect without credentials.
+- status: 400
+  error: missing_query
+  title: Company lookup called without an identifier
+  hint: Pass ?name=Exact Company Name or ?domain=company.com
+  observed_at: https://public.stateful.world/api/public/company-teaser
+  remediation: Supply either the name or domain query parameter.
+- status: 406
+  jsonrpc_code: -32000
+  title: 'Not Acceptable: Client must accept text/event-stream'
+  observed_at: 'GET https://public.stateful.world/mcp'
+  remediation: POST JSON-RPC with an Accept header of "application/json, text/event-stream".
+- status: 200
+  jsonrpc_code: -32602
+  is_error: true
+  title: Input validation error
+  detail: 'Invalid arguments for tool <name>; the response embeds the full Zod issue
+    list (code, expected, received, path, message).'
+  observed_at: 'POST tools/call get_industry with no arguments'
+  remediation: Satisfy the tool's declared inputSchema (see mcp/brightai-mcp-tools.json).
+- status: 200
+  jsonrpc_code: -32602
+  is_error: true
+  title: Tool not found
+  detail: 'MCP error -32602: Tool <name> not found'
+  observed_at: 'POST tools/call with an unknown tool name'
+  remediation: Call tools/list for the six valid tool names.
+- status: 200
+  error: unknown_industry
+  title: Unknown vertical slug
+  hint: Call list_industries for the valid slugs.
+  observed_at: 'POST tools/call get_industry with industry="zzzz"'
+  remediation: Use a slug from list_industries.
+- status: 403
+  title: Invalid Host
+  body: Invalid Host
+  content_type: text/plain
+  observed_at: https://api.bright.ai/
+  note: AWS ALB in front of the (undocumented) customer platform. Not part of the public
+    agent surface and carries no JSON error envelope.
+soft_domain_results:
+  note: 'Not errors, but worth recording: check_company returns HTTP 200 with a matches[]
+    array whose entry carries in_bgod:false and an explanatory note when the operator
+    is not in the database. Clients must read the body, not the status code, to detect
+    a miss.'
+  observed_at: https://public.stateful.world/api/public/company-teaser?name=Acme+Corp
+  http_status: 200
+x-evidence:
+  fetched: '2026-08-08'
+  probe_count: 8

@@ -1,0 +1,31 @@
+generated: '2026-08-08'
+method: generated
+source: mcp/brightai-mcp.yml (tool, prompt and resource names verified against a live
+  tools/list, prompts/list and resources/list on 2026-08-08)
+note: 'Grounded in MCP tool names rather than OpenAPI operationIds — BrightAI publishes
+  no OpenAPI, and the MCP server is its only self-describing contract. Every operation
+  named in these skills exists verbatim in mcp/brightai-mcp-tools.json.'
+surface: https://public.stateful.world/mcp
+authentication: none
+skills:
+- file: brightai-assess-an-operator.md
+  name: Assess an infrastructure operator against BrightAI's database
+  api: mcp/brightai-mcp.yml
+  operations:
+  - check_company
+  - get_industry
+  - list_industries
+- file: brightai-size-a-vertical.md
+  name: Size an essential-services vertical and its observability problems
+  api: mcp/brightai-mcp.yml
+  operations:
+  - list_industries
+  - get_industry
+  - list_problem_families
+  - get_problem_family
+- file: brightai-brief-on-brightai.md
+  name: Brief a visitor on BrightAI accurately
+  api: mcp/brightai-mcp.yml
+  operations:
+  - brightai_overview
+  - list_industries

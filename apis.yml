@@ -1,23 +1,109 @@
 aid: brightai
 name: BrightAI
-description: 'BrightAI is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'BrightAI builds Physical AI for essential services — continuous, AI-driven
+  awareness of the real-time state of physical infrastructure for operators of water,
+  power, energy, transportation and industrial systems. Founded in 2019 by SmartThings
+  founder Alex Hawkinson, the company ships a four-layer Stateful platform (Data Acquisition,
+  AI Hub, Stateful OS, Foundation Models) combining peel-and-stick sensors (Stateful
+  Sticker), autonomous drone and quadruped inspection, a voice-interactive field Stateful
+  Wearable, and infrastructure foundation models trained on operational outcomes across
+  millions of industrial assets. BrightAI publishes no conventional developer portal
+  or OpenAPI, but it does operate a public, no-authentication Model Context Protocol
+  server at public.stateful.world/mcp exposing six read-only tools over its Global
+  Observability Database, alongside an llms.txt index, agent-addressed markdown briefs,
+  and two unauthenticated public JSON endpoints.'
 url: https://raw.githubusercontent.com/api-evangelist/brightai/refs/heads/main/apis.yml
+image: https://cdn.prod.website-files.com/6a4ea9e79536d28883c64986/6a4ea9e79536d28883c64b40_bright-ai-favicon-256x256.jpg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-08'
 modified: '2026-08-08'
 tags:
 - Company
-apis: []
+- Physical AI
+- Industrial IoT
+- Infrastructure Monitoring
+- Predictive Maintenance
+- Edge AI
+- Foundation Models
+- Model Context Protocol
+- Energy and Utilities
+- Water and Wastewater
+apis:
+- aid: brightai:public-mcp
+  name: BrightAI Public MCP Server
+  description: 'A public, read-only Model Context Protocol server (protocol 2025-06-18,
+    serverInfo brightai-public 0.1.0) requiring no authentication. Exposes six tools
+    over BrightAI''s Global Observability Database — brightai_overview, list_industries,
+    get_industry, list_problem_families, get_problem_family and check_company — plus
+    five MCP prompts and four markdown corpus resources. Every tool is annotated readOnlyHint
+    true, destructiveHint false, idempotentHint true and openWorldHint false.'
+  humanURL: https://public.stateful.world/start.md
+  baseURL: https://public.stateful.world/mcp
+  tags:
+  - Model Context Protocol
+  - Agent Tools
+  - Infrastructure Data
+  properties:
+  - type: MCPServer
+    url: mcp/brightai-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/brightai-tool-crosswalk.yml
+- aid: brightai:public-data
+  name: BrightAI Public Observatory Data API
+  description: 'Two unauthenticated JSON endpoints published in BrightAI''s llms.txt:
+    /api/public/industries returns live worldwide aggregates and per-vertical addressable
+    annual impact from the Global Observability Database, and /api/public/company-teaser
+    performs a fuzzy operator lookup by name or domain. BrightAI publishes no OpenAPI
+    description for either endpoint.'
+  humanURL: https://public.stateful.world/llms.txt
+  baseURL: https://public.stateful.world/api/public
+  tags:
+  - Open Data
+  - Infrastructure Data
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/brightai-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/brightai_stock/
+  url: https://www.bright.ai/
+- type: Documentation
+  url: https://public.stateful.world/start.md
+- type: LLMsTxt
+  url: llms/brightai-llms.txt
+- type: Authentication
+  url: authentication/brightai-authentication.yml
+- type: Conventions
+  url: conventions/brightai-conventions.yml
+- type: ErrorCatalog
+  url: errors/brightai-problem-types.yml
+- type: DataModel
+  url: data-model/brightai-data-model.yml
+- type: AgenticAccess
+  url: agentic-access/brightai-agentic-access.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conformance
+  url: conformance/brightai-conformance.yml
+- type: Lifecycle
+  url: lifecycle/brightai-lifecycle.yml
+- type: TrustCenter
+  url: security/brightai-trust-center.yml
+- type: Compliance
+  url: https://www.bright.ai/trust-and-security/
+- type: PrivacyPolicy
+  url: https://bright.ai/privacy-policy/
+- type: Support
+  url: https://bright.ai/contact-us
+- type: SignUp
+  url: https://bright.ai/get-started/
+x-enrichment:
+  date: '2026-08-08'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1

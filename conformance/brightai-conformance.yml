@@ -1,0 +1,101 @@
+generated: '2026-08-08'
+method: probed
+source: live probes of https://public.stateful.world/* + https://www.bright.ai/trust-and-security/
+  + https://trust.bright.ai/
+standards:
+- id: mcp-2025-06-18
+  name: Model Context Protocol
+  conforms: true
+  evidence: 'initialize returned protocolVersion "2025-06-18" with serverInfo brightai-public
+    0.1.0; tools/list, prompts/list and resources/list all answered; tool errors use
+    the isError convention and populate structuredContent.'
+  url: https://public.stateful.world/mcp
+- id: jsonrpc-2.0
+  name: JSON-RPC 2.0
+  conforms: true
+  evidence: All MCP responses carry "jsonrpc":"2.0" with matching id; protocol errors
+    use the standard error object (observed code -32000, -32602).
+- id: mcp-streamable-http
+  name: MCP streamable HTTP transport
+  conforms: true
+  evidence: 'POST returns text/event-stream SSE frames; GET without an SSE Accept header
+    is rejected 406 with "Client must accept text/event-stream".'
+- id: llmstxt
+  name: llms.txt
+  conforms: true
+  evidence: https://public.stateful.world/llms.txt returns 200 text/plain with the H1
+    + blockquote + sectioned link-list structure the format specifies.
+- id: json-schema-draft-07
+  name: JSON Schema draft-07
+  conforms: true
+  evidence: Every MCP tool inputSchema declares $schema http://json-schema.org/draft-07/schema#
+    with type/properties/required/additionalProperties.
+- id: soc2-type-ii
+  name: SOC 2 Type II
+  conforms: true
+  evidence: '"SOC 2 Type II compliant, verified by an independent third-party auditor"
+    on https://www.bright.ai/trust-and-security/; a Sprinto-hosted trust center at
+    https://trust.bright.ai/ lists SOC 2 Certified with 40+ published policy documents
+    and control families across product, data, network, app, endpoint and corporate
+    security.'
+  scope: data ingestion and processing systems, cloud infrastructure and services,
+    identity and access management, monitoring/logging/operational controls
+  report_access: on request via the trust center
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence: No OpenAPI or Swagger document found on any host after probing /openapi.json,
+    /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs and /redoc against
+    api.bright.ai, www.bright.ai and public.stateful.world.
+- id: rfc9457-problem-details
+  name: RFC 9457 Problem Details
+  conforms: false
+  evidence: 'REST errors use a bespoke {"error","hint"} JSON object with content-type
+    application/json — no application/problem+json, no type/title/status/detail members.'
+- id: rfc9116-security-txt
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on www.bright.ai and public.stateful.world.
+- id: rfc8615-well-known
+  name: RFC 8615 well-known URIs
+  conforms: false
+  evidence: 'www.bright.ai answers every /.well-known/* path with an HTML page reading
+    "Invalid .well-known request"; public.stateful.world answers with a JSON 404. No
+    well-known document is served on any host.'
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json return 404 on
+    public.stateful.world and www.bright.ai. stateful.world and www.stateful.world
+    answer 200 for every path, but with the SPA HTML shell rather than an AgentCard
+    object — rejected as a catch-all false positive.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: No authorization server. /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource
+    return 404, the latter stating the MCP server is public and requires no authentication.
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  applicable: false
+  evidence: No event, streaming or webhook surface is published. Not penalized — there
+    is no event surface to describe.
+- id: graphql
+  name: GraphQL
+  conforms: false
+  evidence: No /graphql endpoint responded on any probed host.
+x-evidence:
+  fetched: '2026-08-08'
+  probes:
+  - url: https://public.stateful.world/mcp
+    http_status: 200
+  - url: https://public.stateful.world/llms.txt
+    http_status: 200
+  - url: https://trust.bright.ai/
+    http_status: 200
+  - url: https://www.bright.ai/trust-and-security/
+    http_status: 200
+  - url: https://www.bright.ai/.well-known/security.txt
+    http_status: 404
+  - url: https://public.stateful.world/.well-known/agent-card.json
+    http_status: 404

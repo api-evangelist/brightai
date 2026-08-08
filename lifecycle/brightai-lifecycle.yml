@@ -1,0 +1,65 @@
+generated: '2026-08-08'
+method: probed
+source: live probes of https://public.stateful.world/mcp and /api/public/* ; https://public.stateful.world/llms.txt
+versioning:
+  scheme: none-in-path
+  detail: '/api/public/* carries no version segment. The MCP surface versions per-connection
+    through the protocol handshake instead.'
+  mcp_protocol_version: '2025-06-18'
+  mcp_protocol_negotiation: client sends MCP-Protocol-Version; server echoes protocolVersion
+    in the initialize result
+  server_version: brightai-public 0.1.0
+  server_version_note: 'A 0.x server version on a production, publicly advertised surface
+    — BrightAI is signalling this is early. Clients should expect the tool set to move;
+    the server declares listChanged true for tools, prompts and resources, which is
+    the only change-notification channel published.'
+change_notification:
+  mechanism: MCP listChanged notifications
+  tools: true
+  prompts: true
+  resources: true
+  detail: The only machine-readable change signal BrightAI publishes. There is no dated
+    changelog, no release notes page and no version history.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  detail: No deprecation policy, no Sunset or Deprecation header support observed on
+    any 200 response.
+sla:
+  url: null
+  published: false
+status_page:
+  url: null
+  published: false
+  detail: 'No status page found. status.bright.ai does not resolve; status.stateful.world
+    does not resolve; no status link appears on bright.ai, the trust center, or in
+    llms.txt.'
+freshness_signal:
+  field: as_of
+  detail: 'The public data endpoints self-report currency with an ISO-8601 as_of timestamp
+    and the note "Recomputed continuously." This is the closest thing to a published
+    operational signal on the surface.'
+  observed: '2026-08-08T11:01:06.964Z'
+stability_caveats:
+  published_by_provider:
+  - 'start.md is declared canonical and explicitly supersedes older BrightAI pages
+    that "may carry stale dated or coming soon labels" — the provider acknowledges
+    its own surface is inconsistently versioned.'
+  - The problem-family catalog count is explicitly non-fixed; list_industries' tool
+    description instructs clients to "read it from the response rather than assuming
+    a fixed number."
+  - Company-specific assessment access is described as "rolling out shortly" with no
+    date, and BrightAI instructs agents never to estimate a timeframe.
+deprecated_operations: []
+x-evidence:
+  fetched: '2026-08-08'
+  probes:
+  - url: https://public.stateful.world/mcp
+    method: POST initialize
+    http_status: 200
+  - url: https://status.bright.ai/
+    http_status: 000
+    note: DNS does not resolve
+  - url: https://public.stateful.world/api/public/industries
+    http_status: 200

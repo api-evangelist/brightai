@@ -1,0 +1,106 @@
+generated: '2026-08-08'
+method: probed
+source: live probes of https://public.stateful.world/mcp and /api/public/* ; https://public.stateful.world/llms.txt
+  ; https://public.stateful.world/start.md
+scope: 'Covers only BrightAI''s PUBLIC agent surface. The customer platform behind
+  api.bright.ai publishes no conventions.'
+authentication:
+  style: none
+  detail: All public surfaces are anonymous. See authentication/brightai-authentication.yml.
+transport:
+  mcp:
+    protocol: Model Context Protocol, streamable HTTP
+    protocol_version: '2025-06-18'
+    envelope: JSON-RPC 2.0
+    response_content_type: 'text/event-stream (SSE frames carrying "event: message"
+      + "data: {json-rpc}")'
+    version_header: MCP-Protocol-Version
+    negotiation: server echoes protocolVersion in the initialize result
+  rest:
+    base: https://public.stateful.world/api/public
+    response_content_type: application/json; charset=utf-8
+    style: flat JSON objects, no envelope wrapper on success
+idempotency:
+  supported: false
+  detail: 'There is no idempotency-key contract, because there is nothing to make idempotent:
+    every published operation is read-only. All six MCP tools are annotated readOnlyHint
+    true / destructiveHint false / idempotentHint true, and both REST endpoints are
+    GET. Repeating any call is safe by construction, but BrightAI documents no
+    Idempotency-Key header and exposes no write operation.'
+  machine_readable_signal: MCP tool annotations (idempotentHint) — see agentic-access/brightai-agentic-access.yml
+pagination:
+  style: limit-only, no cursor
+  detail: 'Only list_problem_families is paginated, via a `limit` integer (minimum
+    1, maximum 200, default 40). There is no offset, cursor, page token or
+    next-page field in any observed response. list_industries returns the full set
+    of 15 verticals unpaginated.'
+  params:
+  - limit
+filtering:
+  detail: list_problem_families accepts `industry` (vertical slug or name) and `search`
+    (substring on family name). get_industry and check_company perform fuzzy matching
+    on the caller's input rather than exact-match lookup.
+  fuzzy_matching: true
+  fuzzy_signal: 'check_company returns a matched_via: "close_spelling" flag when it
+    corrected the input — BrightAI instructs clients to confirm the correction with
+    the user rather than silently substituting it.'
+freshness:
+  detail: The public data endpoints carry an `as_of` ISO-8601 timestamp and state the
+    aggregates are "Recomputed continuously." Observed as_of matched request time to
+    the second.
+  field: as_of
+error_envelope:
+  rest:
+    shape: '{"error": "<slug>", "hint": "..."} or {"error": "<slug>", "note": "..."}'
+    format: bespoke JSON — NOT RFC 9457 (no application/problem+json, no type/title/status/detail
+      members)
+    example_observed: '{"error":"not_found","hint":"This is BrightAI''s public agent
+      surface."}'
+  mcp:
+    shape: JSON-RPC 2.0 error object
+  see: errors/brightai-problem-types.yml
+rate_limits:
+  documented: false
+  detail: No rate-limit headers were observed on any 200 response, and no rate-limit
+    policy is published. Absence of a documented limit is recorded here as observed
+    fact, not as an assurance.
+versioning:
+  scheme: none in the URL path — /api/public/* carries no version segment
+  mcp: version negotiated per-connection via the MCP protocolVersion handshake; serverInfo
+    reports brightai-public 0.1.0
+  see: lifecycle/brightai-lifecycle.yml
+agent_conventions:
+  note: 'BrightAI publishes an unusually explicit set of behavioural rules for AI
+    clients — a genuine agent-facing convention layer, not a developer one. Captured
+    because it governs how the API may be used.'
+  rules:
+  - Attribute data to "BrightAI's public Observatory data."
+  - Never estimate, guess, bracket or infer pricing, hardware cost, launch dates, revenue,
+    investor/ownership relationships, or a named company's grade.
+  - Company-specific assessments are restricted to verified employees of that company;
+    industry-level data is open to everyone.
+  - When declining a gated ask, offer the public anonymized aggregate instead so a
+    refusal is not a dead end.
+  - Tool results are compact JSON meant to be read directly; the raw output may be
+    shared with the user.
+  - start.md is declared canonical and supersedes older BrightAI pages where they conflict.
+  source: https://public.stateful.world/start.md
+cross_links:
+  authentication: authentication/brightai-authentication.yml
+  errors: errors/brightai-problem-types.yml
+  lifecycle: lifecycle/brightai-lifecycle.yml
+  mcp: mcp/brightai-mcp.yml
+  agentic_access: agentic-access/brightai-agentic-access.yml
+x-evidence:
+  fetched: '2026-08-08'
+  probes:
+  - url: https://public.stateful.world/mcp
+    method: POST tools/list
+    http_status: 200
+    content_type: text/event-stream
+  - url: https://public.stateful.world/api/public/industries
+    http_status: 200
+    content_type: application/json; charset=utf-8
+  - url: https://public.stateful.world/openapi.json
+    http_status: 404
+    content_type: application/json; charset=utf-8

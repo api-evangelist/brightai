@@ -1,0 +1,56 @@
+generated: '2026-08-08'
+method: probed
+source: live probes of https://public.stateful.world/mcp and https://public.stateful.world/api/public/*
+docs: https://public.stateful.world/llms.txt
+note: 'Derived by probe, not from an OpenAPI — BrightAI publishes no OpenAPI and therefore
+  no securitySchemes. The auth posture below is what the surfaces actually did when
+  called with no credentials at all.'
+summary:
+  types:
+  - none
+  api_key_in: []
+  oauth2_flows: []
+  public_surfaces: 3
+  authenticated_surfaces: 0
+  verdict: Every published BrightAI API surface is deliberately anonymous. There is
+    no signup, no key issuance, no OAuth and no token of any kind on the public surface.
+schemes:
+- name: public-no-auth
+  type: none
+  applies_to:
+  - https://public.stateful.world/mcp
+  - https://public.stateful.world/api/public/industries
+  - https://public.stateful.world/api/public/company-teaser
+  evidence: 'MCP initialize, tools/list, prompts/list and resources/list all returned
+    200 with no Authorization header. Both /api/public endpoints returned 200 unauthenticated.'
+  provider_statement: 'BrightAI''s llms.txt states "MCP server (no login): https://public.stateful.world/mcp";
+    the server answers /.well-known/oauth-protected-resource with {"error":"not_found","note":"This
+    MCP server is public and requires no authentication"}.'
+gated_surfaces:
+- surface: Company-specific assessment (modeled dollar figures and grades for a named
+    operator)
+  gate: work-email verification of an employee of that company
+  status: 'BrightAI states this is "rolling out shortly" — not live at probe time.'
+  source: https://public.stateful.world/start.md
+- surface: https://api.bright.ai
+  gate: unknown — an AWS ALB that answers 403 "Invalid Host" at the root for an unrecognized
+    Host header and 404 for unmatched paths. Presumed the customer platform API; no
+    public documentation, no discovery document, no advertised auth model.
+  http_status: 403
+oauth_discovery:
+- url: https://public.stateful.world/.well-known/oauth-authorization-server
+  http_status: 404
+- url: https://public.stateful.world/.well-known/oauth-protected-resource
+  http_status: 404
+- url: https://www.bright.ai/.well-known/openid-configuration
+  http_status: 404
+x-evidence:
+  fetched: '2026-08-08'
+  probes:
+  - url: https://public.stateful.world/mcp
+    method: POST initialize (no Authorization header)
+    http_status: 200
+  - url: https://public.stateful.world/api/public/industries
+    http_status: 200
+  - url: https://api.bright.ai/
+    http_status: 403
