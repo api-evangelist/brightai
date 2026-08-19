@@ -6,11 +6,10 @@ discovery:
   advertised_in:
   - https://public.stateful.world/llms.txt
   - https://public.stateful.world/start.md
-  - https://www.bright.ai/ (homepage "ask an assistant" links point at start.md, which
-    documents the server)
-  note: BrightAI publishes no developer portal and no OpenAPI. The MCP server is the
-    company's only machine-readable, self-describing API surface, and it is fully
-    anonymous — tools/list, prompts/list and resources/list all answer without credentials.
+  - https://www.bright.ai/ (homepage "ask an assistant" links point at start.md, which documents the server)
+  note: BrightAI publishes no developer portal and no OpenAPI. The MCP server is the company's only machine-readable,
+    self-describing API surface, and it is fully anonymous — tools/list, prompts/list and resources/list
+    all answer without credentials.
 server:
   name: brightai-public
   version: 0.1.0
@@ -31,9 +30,9 @@ capabilities:
 tools:
 - name: brightai_overview
   title: BrightAI overview
-  description: Who BrightAI is, what the Stateful platform does, canonical platform-scale
-    figures, and the live worldwide opportunity numbers from BrightAI's Global Observability
-    Database (BGOD). Includes press-facts and investor-thesis sections. Start here.
+  description: Who BrightAI is, what the Stateful platform does, canonical platform-scale figures, and
+    the live worldwide opportunity numbers from BrightAI's Global Observability Database (BGOD). Includes
+    press-facts and investor-thesis sections. Start here.
   parameters: []
   required: []
   annotations:
@@ -43,9 +42,8 @@ tools:
     openWorldHint: false
 - name: list_industries
   title: Industry list
-  description: Every essential-services vertical BrightAI has mapped, each with live
-    anonymized aggregates - addressable annual impact (USD/yr), operators profiled,
-    and observability problem-family count.
+  description: Every essential-services vertical BrightAI has mapped, each with live anonymized aggregates
+    - addressable annual impact (USD/yr), operators profiled, and observability problem-family count.
   parameters: []
   required: []
   annotations:
@@ -55,16 +53,15 @@ tools:
     openWorldHint: false
 - name: get_industry
   title: Industry deep-dive
-  description: One vertical in depth - live aggregates plus its top observability problem
-    families (names, first-sentence definitions, applicability). Accepts the slug from
-    list_industries or a close industry name.
+  description: One vertical in depth - live aggregates plus its top observability problem families (names,
+    first-sentence definitions, applicability). Accepts the slug from list_industries or a close industry
+    name.
   parameters:
   - name: industry
     type: string
     minLength: 2
     required: true
-    description: Slug or name of the vertical, e.g. "water-and-wastewater" or "Oil
-      & Gas".
+    description: Slug or name of the vertical, e.g. "water-and-wastewater" or "Oil & Gas".
   required:
   - industry
   annotations:
@@ -74,9 +71,8 @@ tools:
     openWorldHint: false
 - name: list_problem_families
   title: Observability problem catalog
-  description: The canonical catalog of observability problem families BrightAI has
-    mapped worldwide (the public taxonomy). Optionally filter by industry slug or a
-    name substring.
+  description: The canonical catalog of observability problem families BrightAI has mapped worldwide (the
+    public taxonomy). Optionally filter by industry slug or a name substring.
   parameters:
   - name: industry
     type: string
@@ -101,9 +97,9 @@ tools:
     openWorldHint: false
 - name: get_problem_family
   title: Problem deep-dive
-  description: The complete public definition of one observability problem family -
-    formal definition, anatomy (manifestations / measurement / intervention), typical
-    assets, and which verticals it applies to.
+  description: The complete public definition of one observability problem family - formal definition,
+    anatomy (manifestations / measurement / intervention), typical assets, and which verticals it applies
+    to.
   parameters:
   - name: family_id
     type: string
@@ -119,18 +115,16 @@ tools:
     openWorldHint: false
 - name: check_company
   title: Company lookup
-  description: Name (or website domain) lookup against BrightAI's Global Observability
-    Database. Returns neutral public facts only - whether the company is profiled,
-    its industry, HQ, a one-line description, and the names and count of observability
-    problem families identified for it. Minor spelling variations are matched automatically;
-    a matched_via "close_spelling" flag marks a did-you-mean correction. Deeper detail
-    is available only to verified employees of the company itself.
+  description: Name (or website domain) lookup against BrightAI's Global Observability Database. Returns
+    neutral public facts only - whether the company is profiled, its industry, HQ, a one-line description,
+    and the names and count of observability problem families identified for it. Minor spelling variations
+    are matched automatically; a matched_via "close_spelling" flag marks a did-you-mean correction. Deeper
+    detail is available only to verified employees of the company itself.
   parameters:
   - name: name
     type: string
     required: false
-    description: Company name, e.g. "Osmose Utilities Services". Close spellings are
-      okay.
+    description: Company name, e.g. "Osmose Utilities Services". Close spellings are okay.
   - name: domain
     type: string
     required: false
@@ -147,20 +141,17 @@ prompts:
   description: 'Guided discovery: what BrightAI does and where it applies to your business.'
 - name: assess-my-company
   title: Assess my company
-  description: Check whether your company is in BrightAI's Global Observability Database
-    and what that means.
+  description: Check whether your company is in BrightAI's Global Observability Database and what that
+    means.
 - name: press-briefing
   title: Press briefing
-  description: 'For journalists: the BrightAI story in three stats, examples, boilerplate,
-    quotables.'
+  description: 'For journalists: the BrightAI story in three stats, examples, boilerplate, quotables.'
 - name: considering-joining
   title: Considering joining BrightAI
-  description: 'For job candidates: the mission, the engineering, the scale, and open
-    roles.'
+  description: 'For job candidates: the mission, the engineering, the scale, and open roles.'
 - name: investor-briefing
   title: Investor briefing
-  description: 'For investors: the Physical AI category thesis, the market map, and
-    the moat.'
+  description: 'For investors: the Physical AI category thesis, the market map, and the moat.'
 resources:
 - uri: brightai-public://corpus/01-brightai-thesis-overview
   title: BrightAI Thesis Overview
@@ -181,12 +172,12 @@ x-evidence:
   fetched: '2026-08-08'
   initialize:
     url: https://public.stateful.world/mcp
-    method: 'POST initialize'
+    method: POST initialize
     http_status: 200
     content_type: text/event-stream
   tools_list:
     url: https://public.stateful.world/mcp
-    method: 'POST tools/list'
+    method: POST tools/list
     http_status: 200
     tools_returned: 6
     gated: false
@@ -194,3 +185,11 @@ x-evidence:
     url: https://public.stateful.world/.well-known/oauth-protected-resource
     http_status: 404
     body_note: 'server answers: "This MCP server is public and requires no authentication"'
+deployment:
+  mode: remote
+  endpoint: https://public.stateful.world/mcp
+  verified: probed
+  probe: live
+  tools: 6
+  checked: '2026-08-12'
+  source: catalog MCP census
