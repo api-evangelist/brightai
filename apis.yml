@@ -16,7 +16,7 @@ url: https://raw.githubusercontent.com/api-evangelist/brightai/refs/heads/main/a
 image: https://cdn.prod.website-files.com/6a4ea9e79536d28883c64986/6a4ea9e79536d28883c64b40_bright-ai-favicon-256x256.jpg
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-08'
 modified: '2026-08-08'
 tags:
