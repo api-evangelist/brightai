@@ -27,6 +27,17 @@ tags:
 - Predictive Maintenance
 - Edge AI
 - Foundation Models
+- MCP
+- Energy and Utilities
+- Water and Wastewater
+tags_raw:
+- Company
+- Physical AI
+- Industrial IoT
+- Infrastructure Monitoring
+- Predictive Maintenance
+- Edge AI
+- Foundation Models
 - Model Context Protocol
 - Energy and Utilities
 - Water and Wastewater
@@ -42,6 +53,10 @@ apis:
   humanURL: https://public.stateful.world/start.md
   baseURL: https://public.stateful.world/mcp
   tags:
+  - MCP
+  - Agent Tools
+  - Infrastructure Data
+  tags_raw:
   - Model Context Protocol
   - Agent Tools
   - Infrastructure Data
