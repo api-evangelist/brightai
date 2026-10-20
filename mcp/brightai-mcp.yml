@@ -29,10 +29,10 @@ capabilities:
     listChanged: true
 tools:
 - name: brightai_overview
-  title: BrightAI overview
   description: Who BrightAI is, what the Stateful platform does, canonical platform-scale figures, and
     the live worldwide opportunity numbers from BrightAI's Global Observability Database (BGOD). Includes
     press-facts and investor-thesis sections. Start here.
+  title: BrightAI overview
   parameters: []
   required: []
   annotations:
@@ -41,9 +41,11 @@ tools:
     idempotentHint: true
     openWorldHint: false
 - name: list_industries
+  description: 'Every essential-services vertical BrightAI has mapped, each with live anonymized aggregates:
+    addressable annual impact (USD/yr), operators profiled, and observability problem-family count. The
+    count is whatever the live catalog holds — read it from the response rather than assuming a fixed
+    number. Use get_industry for depth on one vertical.'
   title: Industry list
-  description: Every essential-services vertical BrightAI has mapped, each with live anonymized aggregates
-    - addressable annual impact (USD/yr), operators profiled, and observability problem-family count.
   parameters: []
   required: []
   annotations:
@@ -52,10 +54,10 @@ tools:
     idempotentHint: true
     openWorldHint: false
 - name: get_industry
+  description: 'One vertical in depth: live aggregates plus its top observability problem families (names,
+    first-sentence definitions, applicability). Accepts the slug from list_industries (e.g. "oil-and-gas")
+    or a close industry name.'
   title: Industry deep-dive
-  description: One vertical in depth - live aggregates plus its top observability problem families (names,
-    first-sentence definitions, applicability). Accepts the slug from list_industries or a close industry
-    name.
   parameters:
   - name: industry
     type: string
@@ -70,9 +72,9 @@ tools:
     idempotentHint: true
     openWorldHint: false
 - name: list_problem_families
-  title: Observability problem catalog
   description: The canonical catalog of observability problem families BrightAI has mapped worldwide (the
     public taxonomy). Optionally filter by industry slug or a name substring.
+  title: Observability problem catalog
   parameters:
   - name: industry
     type: string
@@ -96,10 +98,10 @@ tools:
     idempotentHint: true
     openWorldHint: false
 - name: get_problem_family
-  title: Problem deep-dive
-  description: The complete public definition of one observability problem family - formal definition,
+  description: 'The complete public definition of one observability problem family: formal definition,
     anatomy (manifestations / measurement / intervention), typical assets, and which verticals it applies
-    to.
+    to.'
+  title: Problem deep-dive
   parameters:
   - name: family_id
     type: string
@@ -114,12 +116,14 @@ tools:
     idempotentHint: true
     openWorldHint: false
 - name: check_company
+  description: 'Name (or website domain) lookup against BrightAI''s Global Observability Database. Returns
+    neutral public facts only: whether the company is profiled, its industry, HQ, a one-line description,
+    and the NAMES and COUNT of observability problem families identified for it. Minor spelling variations
+    are matched automatically — a matched_via: "close_spelling" flag marks a did-you-mean correction;
+    confirm the corrected name with the user. Deeper detail (including any modeled figures) is available
+    only to verified employees of the company itself - rolling out shortly. Not a search tool: pass the
+    company''s actual name or domain.'
   title: Company lookup
-  description: Name (or website domain) lookup against BrightAI's Global Observability Database. Returns
-    neutral public facts only - whether the company is profiled, its industry, HQ, a one-line description,
-    and the names and count of observability problem families identified for it. Minor spelling variations
-    are matched automatically; a matched_via "close_spelling" flag marks a did-you-mean correction. Deeper
-    detail is available only to verified employees of the company itself.
   parameters:
   - name: name
     type: string
@@ -218,3 +222,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 6
