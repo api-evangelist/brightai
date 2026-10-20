@@ -1,4 +1,12 @@
 {
+  "endpoint": "https://public.stateful.world/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "brightai-public",
+    "version": "0.1.0"
+  },
   "result": {
     "tools": [
       {
@@ -24,7 +32,7 @@
       {
         "name": "list_industries",
         "title": "Industry list",
-        "description": "Every essential-services vertical BrightAI has mapped, each with live anonymized aggregates: addressable annual impact (USD/yr), operators profiled, and observability problem-family count. The count is whatever the live catalog holds \u2014 read it from the response rather than assuming a fixed number. Use get_industry for depth on one vertical.",
+        "description": "Every essential-services vertical BrightAI has mapped, each with live anonymized aggregates: addressable annual impact (USD/yr), operators profiled, and observability problem-family count. The count is whatever the live catalog holds — read it from the response rather than assuming a fixed number. Use get_industry for depth on one vertical.",
         "inputSchema": {
           "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
@@ -140,7 +148,7 @@
       {
         "name": "check_company",
         "title": "Company lookup",
-        "description": "Name (or website domain) lookup against BrightAI's Global Observability Database. Returns neutral public facts only: whether the company is profiled, its industry, HQ, a one-line description, and the NAMES and COUNT of observability problem families identified for it. Minor spelling variations are matched automatically \u2014 a matched_via: \"close_spelling\" flag marks a did-you-mean correction; confirm the corrected name with the user. Deeper detail (including any modeled figures) is available only to verified employees of the company itself - rolling out shortly. Not a search tool: pass the company's actual name or domain.",
+        "description": "Name (or website domain) lookup against BrightAI's Global Observability Database. Returns neutral public facts only: whether the company is profiled, its industry, HQ, a one-line description, and the NAMES and COUNT of observability problem families identified for it. Minor spelling variations are matched automatically — a matched_via: \"close_spelling\" flag marks a did-you-mean correction; confirm the corrected name with the user. Deeper detail (including any modeled figures) is available only to verified employees of the company itself - rolling out shortly. Not a search tool: pass the company's actual name or domain.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -168,7 +176,5 @@
         }
       }
     ]
-  },
-  "jsonrpc": "2.0",
-  "id": 1
+  }
 }
