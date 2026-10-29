@@ -64,5 +64,105 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-BrightAI is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/brightai_stock/
+BrightAI builds Physical AI for essential services — continuous, AI-driven awareness of the real-time state of physical infrastructure for operators of water, power, energy, transportation and industrial systems. Founded in 2019 by SmartThings founder Alex Hawkinson, the company ships a four-layer Stateful platform (Data Acquisition, AI Hub, Stateful OS, Foundation Models) combining peel-and-stick sensors (Stateful Sticker), autonomous drone and quadruped inspection, a voice-interactive field Stateful Wearable, and infrastructure foundation models trained on operational outcomes across millions of industrial assets. BrightAI publishes no conventional developer portal or OpenAPI, but it does operate a public, no-authentication Model Context Protocol server at public.stateful.world/mcp exposing six read-only tools over its Global Observability Database, alongside an llms.txt index, agent-addressed markdown briefs, and two unauthenticated public JSON endpoints.
+
+**Areas:** Company · Physical AI · Industrial IoT · Infrastructure Monitoring · Predictive Maintenance · Edge AI · Foundation Models · MCP · Energy and Utilities · Water and Wastewater
+
+## BrightAI on APIs.io
+
+Everything profiled for BrightAI is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/brightai/](https://apis.io/providers/brightai/)** — or go straight to one of the APIs or properties below.
+
+### APIs (2)
+
+- [BrightAI Public MCP Server](https://apis.io/apis/brightai/public-mcp/) — A public, read-only Model Context Protocol server (protocol 2025-06-18, serverInfo brightai-public 0.1.0) requiring no authentication. Exposes six tools…
+- [BrightAI Public Observatory Data API](https://apis.io/apis/brightai/public-data/) — Two unauthenticated JSON endpoints published in BrightAI's llms.txt: /api/public/industries returns live worldwide aggregates and per-vertical addressable…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [brightai-public](https://apis.io/servers/brightai/brightai-public/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Brightai Agentic Access](https://apis.io/agentic-access/brightai/brightai-agentic-access/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Brightai Authentication](https://apis.io/security/brightai/brightai-authentication/)
+- [Brightai Domain Security](https://apis.io/security/brightai/brightai-domain-security/)
+- [Brightai Trust Center](https://apis.io/security/brightai/brightai-trust-center/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.bright.ai/)
+- [Documentation](https://public.stateful.world/start.md)
+- [Sign up](https://bright.ai/get-started/)
+- [Support](https://bright.ai/contact-us)
+- [Compliance](https://www.bright.ai/trust-and-security/)
+- [Privacy policy](https://bright.ai/privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 24.4** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 28.0 |
+| Access clarity | 39.5 |
+
+**Agent readiness 22.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | yes |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 21.3** — Energy & Utilities
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/brightai/](https://apis.io/providers/brightai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for BrightAI: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/brightai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
